@@ -6,19 +6,17 @@ const options = {};
 
 function App() {
   const [isMatch, setIsMatch] = useState(false);
-  const [regularExp, setRegularExp] = useState("");
+  const [regularExp, setRegularExp] = useState<RegExp>(new RegExp(""));
   const [route, setRoute] = useState("");
   const [path, setPath] = useState("");
 
   useEffect(() => {
-    setIsMatch(testMatch(route, path));
-  }, [route, path]);
+    setRegularExp(pathToRegexp(route, undefined, options));
+  }, [route]);
 
-  const testMatch = (r: string, p: string) => {
-    let regex = pathToRegexp(r, undefined, options);
-    setRegularExp(regex.toString());
-    return regex.test(p);
-  };
+  useEffect(() => {
+    setIsMatch(regularExp.test(path));
+  }, [regularExp, path]);
 
   return (
     <div className="App">
@@ -30,7 +28,6 @@ function App() {
             setRoute(e.target.value);
           }}
         />
-        {route}
       </section>
       <section>
         Path -
@@ -40,9 +37,8 @@ function App() {
             setPath(e.target.value);
           }}
         />
-        {path}
       </section>
-      <section>regex - {regularExp}</section>
+      <section>regex - {regularExp.toString()}</section>
       <section>Match - {JSON.stringify(isMatch)}</section>
     </div>
   );
