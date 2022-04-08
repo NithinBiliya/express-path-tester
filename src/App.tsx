@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
+  const [isMatch, setIsMatch] = useState(false);
+  const [route, setPath] = useState("");
+  const [path, setRoute] = useState("");
+
+  useEffect(() => {
+    setIsMatch(testMatch(route, path));
+  }, [route, path]);
+
+  const testMatch = (r: string, p: string) => {
+    return r === p;
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <section>
+        Route -
+        <input
+          type="text"
+          onChange={(e) => {
+            setRoute(e.target.value);
+          }}
+        />
+      </section>
+      <section>
+        Path -
+        <input
+          type="text"
+          onChange={(e) => {
+            setPath(e.target.value);
+          }}
+        />
+      </section>
+      <section>Match - {JSON.stringify(isMatch)}</section>
     </div>
   );
 }
